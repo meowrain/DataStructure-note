@@ -244,3 +244,109 @@ void Print() {
 在 Print 函数中，从链表的头节点 head 开始遍历，依次输出每个节点的数据成员，直到链表的末尾。这样就可以按照节点的顺序输出链表中的所有数据。
 
 # 在任意位置插入节点
+> 想在任意位置插入节点，咱们首先要想明白一个问题，怎么任意位置插入？
+> 现在咱们先来想一下，在头部插入节点该怎么做？没错，头插法，这样就能实现在链表头部不断插入节点的功能了！
+> 好的，既然咱们已经可以在头部不断插入节点了，那么在第二个位置插入呢？很明显，我们需要先创建一个新节点，然后给它的数据位赋值，然后让它的next指针指向头节点的next指针指向的节点，接着，咱们再把头节点的next指针，改指向这个新指针，咱们的目的就达到了！
+> 这是第二个位置，那第三个位置呢，同理，只需要让新节点的next指针指向第二个节点的next指针指向的节点，然后让第二个节点的next指针指向新节点就实现了在第三个位置插入了！
+> 好的，那问题来了，我要是还没创建前面的节点，就在后面插入节点，进行这种非法操作，我们怎么处理？
+> 是不是只需要一个指针，从头开始遍历，从头往后走n-1个节点，如果这个节点的值是NULL，那说明新节点的上一个位置是NULL！很明显这样就不能进行插入操作了，直接告诉运行程序的人不能插入就可以了！
+```cpp
+#include <iostream>
+struct Node
+{
+    int data;
+    Node *next;
+};
+
+Node *head = NULL;
+void Insert(int, int);
+void Print();
+int main()
+{
+    std::cout << "插入位置： " << std::endl;
+    int n;
+    std::cin >> n;
+    std::cout << "插入节点数据： " << std::endl;
+    int x;
+    std::cin >> x;
+    Insert(n,x);
+    Print();
+    return 0;
+}
+void Insert(int n, int x)
+{
+    if (n == 1)
+    {
+        Node *temp = new Node();
+        temp->data = x;
+        temp->next = head;
+        head = temp;
+        return;
+    }
+    Node *cur = head;
+    for (int i = 1; i < n - 1 && cur != NULL; i++)
+    {
+        cur = cur->next;
+    }
+    if (cur == NULL)
+    {
+        std::cout << "Can not insert!" << std::endl;
+        return;
+    }
+    Node *temp = new Node();
+    temp->data = x;
+    temp->next = cur->next;
+    cur->next = temp;
+}
+void Print() {
+    std::cout << "链表内容如下：" << std::endl;
+    Node* curr = head;
+    while(curr != NULL) {
+        std::cout << curr->data << " ";
+        curr = curr->next;
+    }
+    std::cout << std::endl;
+}
+```
+我们这个程序，完成了在链表指定位置插入节点的功能
+我们首先来看`Insert`函数，Ineert函数接收两个参数，第一个参数n用来接收插入的位置，第二个参数x用来接收插入节点的数据内容
+```cpp
+   if (n == 1)
+    {
+        Node *temp = new Node();
+        temp->data = x;
+        temp->next = head;
+        head = temp;
+        return;
+    }
+```
+看这里，这里是当插入位置为1时候进行的插入代码，首先创建一个temp节点，然后给temp节点的数据赋值，让它的next指针指向head节点，最后让head = temp，这么说你应该很熟悉了，这就是头插法，不停得在头部也就是链表第一个位置插入新节点
+
+
+```cpp
+   Node *cur = head;
+    for (int i = 1; i < n - 1 && cur != NULL; i++)
+    {
+        cur = cur->next;
+    }
+```
+看这里，这里我们创建了一个指向head的指针，然后进行遍历，直到cur指向了要插入位置的前一个节点，因为咱们要用到插入位置的前一个节点的next指针啊！是吧？
+
+```cpp
+    if (cur == NULL)
+    {
+        std::cout << "Can not insert!" << std::endl;
+        return;
+    }
+```
+接下来咱们判断一手，防止在非法位置进行插入
+
+
+```cpp
+    Node *temp = new Node();
+    temp->data = x;
+    temp->next = cur->next;
+    cur->next = temp;
+```
+要是不是在头部插入，也不是非法插入，那咱们就是按照正常流程来了！
+最后咱们进行操作，让要插入的节点的next指针指向插入位置的前一个节点的next指针指向的节点，最后把插入位置的前一个节点的next指针指向插入的节点，实现新节点的任意位置的插入
