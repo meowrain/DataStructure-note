@@ -42,7 +42,7 @@ void Insert(int x)
 }
 void Print()
 {
-    std::cout << "链表中的内容为：" << std::endl;
+    std::cout << "閾捐〃涓殑鍐呭涓猴細" << std::endl;
     Node *curr = head;
     while (curr != NULL)
     {
@@ -54,8 +54,8 @@ void Print()
 void del_element(int n)
 {
     if (head == NULL)
-    { // 链表为空的情况，不用删除
-        std::cout << "链表为空，无法删除，请在链表内插入值后进行删除操作 ！" << std::endl;
+    { 
+        std::cout << "娌℃湁瑕佸垹闄ょ殑鑺傜偣" << std::endl;
         return;
     }
     if (n == 1)
@@ -70,7 +70,7 @@ void del_element(int n)
         cur = cur->next;
     }
     if(cur->next == NULL) {
-        std::cout << "输入了非法的删除位置！" << std::endl;
+        std::cout << "鍒犻櫎浣嶇疆瓒呭嚭鑼冨洿~" << std::endl;
         return;
     }
     cur->next = cur->next->next;

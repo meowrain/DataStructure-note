@@ -1,5 +1,5 @@
-
 # 第一个链表程序
+
 ```cpp
 // 第一个链表程序
 #include <iostream>
@@ -19,14 +19,15 @@ int main() {
     return 0;
 }
 ```
-![1688782652572](image/index/1688782652572.png)
 
+![1688782652572](image/index/1688782652572.png)
 
 ---
 
 # 在链表中插入节点
 
 ## 在链表尾部插入节点
+
 ```cpp
 #include <iostream>
 
@@ -93,11 +94,13 @@ int main()
 delete temp; // 释放temp节点占用的内存  
 delete temp1; // 释放temp1节点占用的内存
 ```
+
 这样，就可以确保在程序结束前正确释放分配的内存了。
 
 ---
 
 要求：用户首先输入n，表示输入几个数字，然后依次输入n个数字x，用Insert函数存入链表，最后使用Print函数打印出来
+
 ```cpp
 #include <iostream>
 struct Node
@@ -155,9 +158,11 @@ void Print()
 ```
 
 ## 在链表头部插入节点
+
 通过使用头插法，你可以在链表的头部插入新节点，并且可以更方便地管理链表。这种方法通常比尾插法更简单，因为它不需要遍历整个链表来找到链表的头部位置。
 
 头插法是指在创建链表时，将新节点插入到链表的头部位置，而不是尾部位置。在你的代码中，首先创建了一个新节点 temp1，并将其数据设置为 2，然后将 temp1 赋值给 head，即让 head 指向新节点。然后再次创建了一个新节点 temp1，并将其数据设置为 1，然后将 temp1 的 next 指向原来的头节点 head，从而实现了头插法。
+
 ```cpp
 #include <iostream>  
 // 定义一个结构体Node，表示链表的节点  
@@ -186,12 +191,12 @@ int main(void)
 }
 ```
 
-
 > 现在我们来编写一个能通过函数，让用户自己输入并把输入的数据存入链表的程序😊
 
 ---
 
 要求：用户首先输入n，表示输入几个数字，然后依次输入n个数字x，用Insert函数存入链表，最后使用Print函数打印出来
+
 ```cpp
 #include <iostream>
 struct Node {
@@ -232,6 +237,7 @@ void Print() {
     }
 }
 ```
+
 这段代码实现了一个简单的链表，用户可以输入数字个数和每个数字，然后将它们存储在链表中。通过使用头插法，新插入的数字会出现在链表的开头，而输出的顺序将与输入的顺序一致。
 
 在主函数中，首先读取用户输入的数字个数 n，并创建一个大小为 n+1 的数组 arr，用于存储用户输入的数字。然后，通过循环依次读取每个数字，并将其存储在数组中。
@@ -244,12 +250,14 @@ void Print() {
 在 Print 函数中，从链表的头节点 head 开始遍历，依次输出每个节点的数据成员，直到链表的末尾。这样就可以按照节点的顺序输出链表中的所有数据。
 
 # 在任意位置插入节点
+
 > 想在任意位置插入节点，咱们首先要想明白一个问题，怎么任意位置插入？
 > 现在咱们先来想一下，在头部插入节点该怎么做？没错，头插法，这样就能实现在链表头部不断插入节点的功能了！
 > 好的，既然咱们已经可以在头部不断插入节点了，那么在第二个位置插入呢？很明显，我们需要先创建一个新节点，然后给它的数据位赋值，然后让它的next指针指向头节点的next指针指向的节点，接着，咱们再把头节点的next指针，改指向这个新指针，咱们的目的就达到了！
 > 这是第二个位置，那第三个位置呢，同理，只需要让新节点的next指针指向第二个节点的next指针指向的节点，然后让第二个节点的next指针指向新节点就实现了在第三个位置插入了！
 > 好的，那问题来了，我要是还没创建前面的节点，就在后面插入节点，进行这种非法操作，我们怎么处理？
 > 是不是只需要一个指针，从头开始遍历，从头往后走n-1个节点，如果这个节点的值是NULL，那说明新节点的上一个位置是NULL！很明显这样就不能进行插入操作了，直接告诉运行程序的人不能插入就可以了！
+
 ```cpp
 #include <iostream>
 struct Node
@@ -308,8 +316,10 @@ void Print() {
     std::cout << std::endl;
 }
 ```
+
 我们这个程序，完成了在链表指定位置插入节点的功能
-我们首先来看`Insert`函数，Ineert函数接收两个参数，第一个参数n用来接收插入的位置，第二个参数x用来接收插入节点的数据内容
+我们首先来看 `Insert`函数，Ineert函数接收两个参数，第一个参数n用来接收插入的位置，第二个参数x用来接收插入节点的数据内容
+
 ```cpp
    if (n == 1)
     {
@@ -320,8 +330,8 @@ void Print() {
         return;
     }
 ```
-看这里，这里是当插入位置为1时候进行的插入代码，首先创建一个temp节点，然后给temp节点的数据赋值，让它的next指针指向head节点，最后让head = temp，这么说你应该很熟悉了，这就是头插法，不停得在头部也就是链表第一个位置插入新节点
 
+看这里，这里是当插入位置为1时候进行的插入代码，首先创建一个temp节点，然后给temp节点的数据赋值，让它的next指针指向head节点，最后让head = temp，这么说你应该很熟悉了，这就是头插法，不停得在头部也就是链表第一个位置插入新节点
 
 ```cpp
    Node *cur = head;
@@ -330,6 +340,7 @@ void Print() {
         cur = cur->next;
     }
 ```
+
 看这里，这里我们创建了一个指向head的指针，然后进行遍历，直到cur指向了要插入位置的前一个节点，因为咱们要用到插入位置的前一个节点的next指针啊！是吧？
 
 ```cpp
@@ -339,8 +350,8 @@ void Print() {
         return;
     }
 ```
-接下来咱们判断一手，防止在非法位置进行插入
 
+接下来咱们判断一手，防止在非法位置进行插入
 
 ```cpp
     Node *temp = new Node();
@@ -348,13 +359,107 @@ void Print() {
     temp->next = cur->next;
     cur->next = temp;
 ```
+
 要是不是在头部插入，也不是非法插入，那咱们就是按照正常流程来了！
 最后咱们进行操作，让要插入的节点的next指针指向插入位置的前一个节点的next指针指向的节点，最后把插入位置的前一个节点的next指针指向插入的节点，实现新节点的任意位置的插入
 
 # 在任意位置删除节点
+这段代码实现了一个简单的链表，包括向链表中插入节点、打印链表的数据以及删除链表中指定位置的节点等操作。以下是对于这段代码的详细解释：
 
+首先，在代码开头定义了一个 Node 结构体，它包含了一个整型数据成员 data 和一个指向下一个节点的指针成员 next。此外，还定义了一个 head 指针，表示链表的头节点，它的初始值为 NULL，表示链表为空。
 
-# 翻转链表
+然后，定义了三个函数来实现链表的操作：
+
+Insert(int x) 函数：该函数用来向链表中插入一个新节点，新节点的数据值为 x。如果链表为空，则将新节点设置为链表的头节点，否则将新节点插入到链表的末尾。
+
+Print() 函数：该函数用来打印链表中所有节点的数据值。
+
+del_element(int n) 函数：该函数用来删除链表中指定位置的节点，位置由参数 n 指定。若链表为空或者 n 的值小于等于 0，则无法删除节点；若 n 的值为 1，则删除链表的头节点；否则，遍历链表，找到待删除节点的前驱节点，然后将前驱节点的指针指向待删除节点的后继节点即可。
+
+最后，在 main() 函数中，创建了一个空链表，并向其中插入了一些节点，然后打印了链表的数据，接着删除了链表中的一个节点，再次打印链表的数据，最后结束程序。
+
+```cpp
+#include <iostream>
+struct Node
+{
+    int data;
+    Node *next;
+};
+Node *head;
+void Insert(int);
+void Print();
+void del_element(int);
+int main(void)
+{
+    head = NULL; // empty list
+    Insert(2);
+    Insert(3);
+    Insert(4);
+    Insert(5);
+    Insert(6);
+    Print();
+    del_element(6);
+    Print();
+    return 0;
+}
+void Insert(int x)
+{
+    Node *temp = new Node();
+    temp->data = x;
+    temp->next = NULL;
+    if (head == NULL)
+    {
+        head = temp;
+    }
+    else
+    {
+        Node *curr = head;
+        while (curr->next != NULL)
+        {
+            curr = curr->next;
+        }
+        curr->next = temp;
+    }
+}
+void Print()
+{
+    std::cout << "链表中的内容为：" << std::endl;
+    Node *curr = head;
+    while (curr != NULL)
+    {
+        std::cout << curr->data << " ";
+        curr = curr->next;
+    }
+    std::cout << std::endl;
+}
+void del_element(int n)
+{
+    if (head == NULL)
+    { 
+        std::cout << "没有要删除的节点" << std::endl;
+        return;
+    }
+    if (n == 1)
+    {
+        head = head->next;
+        return;
+    }
+
+    Node *cur = head;
+    for (int i = 1; i < n - 1 && cur->next != NULL; i++)
+    {
+        cur = cur->next;
+    }
+    if(cur->next == NULL) {
+        std::cout << "删除位置超出范围~" << std::endl;
+        return;
+    }
+    cur->next = cur->next->next;
+}
+
+```
+# 翻转链表(迭代方式实现)
+
 想实现翻转链表，我们首先需要思考一下
 
 首先，我们需要明确一下翻转链表的基本思路，就是从链表头开始，依次将每个节点的 next 指针指向前一个节点，最终整个链表就被翻转了。
@@ -381,7 +486,8 @@ void Reverse()
     }
     head = prev;
 }
-``````
+```
+
 首先，函数判断链表的头部是否为空或只有一个节点，如果是，则无需进行翻转，直接返回。这一步的判断是非常必要的，因为链表为空或只有一个节点时，翻转链表是没有意义的。
 
 接着，函数定义了三个指针变量 cur、prev、next，它们分别指向当前节点、当前节点的前一个节点和当前节点的后一个节点。其中，cur 变量初始化为链表的头部，prev 变量初始化为 NULL。
@@ -393,6 +499,7 @@ void Reverse()
 综上所述，您的 Reverse() 函数采用了迭代的方式翻转链表，通过遍历链表，每次将当前节点的 next 指针指向前一个节点，最终完成整个链表的翻转。
 
 完整代码(ReverseLinklist)：
+
 ```cpp
 #include <iostream>
 using namespace std;
@@ -469,3 +576,218 @@ void Reverse()
     head = prev;
 }
 ```
+# 翻转链表(递归方式实现)
+```cpp
+#include <iostream>
+using namespace std;
+struct Node
+{
+    int data;
+    Node *next;
+};
+Node *head;
+void Insert(int);
+void Print(Node* p);
+void Reverse_LinkList(Node* p);
+int main(void)
+{
+    head = NULL;
+    Insert(2);
+    Insert(3);
+    Insert(4);
+    Insert(5);
+    Insert(6);
+    cout << "Normal LinkList:";
+    Print(head);
+    Reverse_LinkList(head);
+    cout << "Reverse LinkList:";
+    Print(head);
+    return 0;
+}
+void Insert(int data)
+{
+    Node *temp = new Node();
+    temp->data = data;
+    temp->next = NULL;
+    if(head == NULL) {
+        head = temp;
+    }else{
+        Node* current = head;
+        while(current->next != NULL) {
+            current = current->next;
+        }
+        current->next = temp;
+    }
+}
+
+void Print(Node* p){
+    if(p == NULL) {
+        cout << endl;
+        return;
+    }
+    cout << p->data << " ";
+    Print(p->next);
+}
+void Reverse_LinkList(Node* p) {
+    if(p->next == NULL) {
+        head = p;
+        return;
+    }
+    Reverse_LinkList(p->next);
+    Node* q = p->next;
+    q->next = p;
+    p->next = NULL;
+}
+```
+
+# 采用递归方法打印链表
+想一想，怎么用递归方法打印链表呢？
+首先我们接收一个指向第一个节点的头指针(head),接下来咱们判断一下头指针指向的节点是不是NULL，如果是NULL，那就没什么好打印的了，直接return
+```cpp
+void Print(Node* p){
+    //recursion
+    if(p == NULL) return;
+}
+
+```
+
+接下来呢，如果这个头指针指向的节点不是NULL，那我们就可以开始打印了
+直接cout << p->data << endl;
+```cpp
+void Print(Node* p) {
+    if(p == NULL) return;
+    cout << p->data << " ";
+}
+```
+
+最后咱们再把头指针指向的第一个节点的下一个节点传入咱们的递归函数，这样不就能继续打印了？直到传入的参数p指向NULL,退出函数，也就完成了对链表的打印
+```cpp
+void Print(Node* p) {
+    if(p == NULL) return;
+    cout << p->data << " ";
+    Print(p->next);
+}
+```
+
+
+完整代码如下：
+
+```cpp
+/* 这个程序，我们采用递归的方式进行打印链表 */
+#include <iostream>
+using namespace std;
+struct Node {
+    int data;
+    Node* next;
+};
+Node* head;
+void Print(Node *p);
+void Insert(int data);
+void ReversePrint(Node *p);
+int main(void) {
+    head = NULL;
+    Insert(1);
+    Insert(2);
+    Insert(3);
+    Insert(4);
+    Insert(5);
+    cout << "Normal Print the Linklist: " << endl;
+    Print(head);
+    cout << endl;
+    return 0;
+}
+void Insert(int data){
+    Node *temp = new Node();
+    temp->data = data;
+    temp->next = NULL;
+    if(head == NULL) {
+        head = temp;
+    } else {
+        Node *curr = head;
+        while(curr->next != NULL) {
+            curr = curr->next;
+        }
+        curr->next = temp;
+    }
+}
+void Print(Node* p){
+    //recursion
+    if(p == NULL) return;
+    cout << p->data << " ";
+    Print(p->next); //Recursive call
+}
+
+```
+
+# 采用递归的方法翻转打印链表
+这个其实很简单：
+```cpp
+void ReversePrint(Node* p){
+    //recursion
+    if(p == NULL) return;
+    ReversePrint(p->next); //Recursive call
+    cout << p->data << " ";
+}
+```
+只需要先进行递归，根据递归原理，开始的节点被压入栈底，最后的在栈顶，那么弹栈的时候，就是从栈顶开始，也就实现了翻转打印链表了
+
+完整代码：
+```cpp
+
+/* 这个程序，我们采用递归的方式进行打印链表 */
+#include <iostream>
+using namespace std;
+struct Node {
+    int data;
+    Node* next;
+};
+Node* head;
+void Print(Node *p);
+void Insert(int data);
+void ReversePrint(Node *p);
+int main(void) {
+    head = NULL;
+    Insert(1);
+    Insert(2);
+    Insert(3);
+    Insert(4);
+    Insert(5);
+    cout << "Normal Print the Linklist: " << endl;
+    Print(head);
+    cout << endl;
+    cout << "Reverse Print the Linklist: " << endl;
+    ReversePrint(head);
+    return 0;
+}
+void Insert(int data){
+    Node *temp = new Node();
+    temp->data = data;
+    temp->next = NULL;
+    if(head == NULL) {
+        head = temp;
+    } else {
+        Node *curr = head;
+        while(curr->next != NULL) {
+            curr = curr->next;
+        }
+        curr->next = temp;
+    }
+}
+void Print(Node* p){
+    //recursion
+    if(p == NULL) return;
+    cout << p->data << " ";
+    Print(p->next); //Recursive call
+}
+void ReversePrint(Node* p){
+    //recursion
+    if(p == NULL) return;
+    ReversePrint(p->next); //Recursive call
+    cout << p->data << " ";
+}
+```
+
+运行结果：
+![1689229851955](image/index/1689229851955.png)
+
+
