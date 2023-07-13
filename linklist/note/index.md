@@ -350,3 +350,122 @@ void Print() {
 ```
 要是不是在头部插入，也不是非法插入，那咱们就是按照正常流程来了！
 最后咱们进行操作，让要插入的节点的next指针指向插入位置的前一个节点的next指针指向的节点，最后把插入位置的前一个节点的next指针指向插入的节点，实现新节点的任意位置的插入
+
+# 在任意位置删除节点
+
+
+# 翻转链表
+想实现翻转链表，我们首先需要思考一下
+
+首先，我们需要明确一下翻转链表的基本思路，就是从链表头开始，依次将每个节点的 next 指针指向前一个节点，最终整个链表就被翻转了。
+
+接下来，让我们逐步分析的 Reverse() 函数：
+
+```cpp
+void Reverse()
+{
+    if (head == NULL || head->next == NULL)
+    {
+        cout << "元素数量不足，无法进行翻转!" << endl;
+        return;
+    }
+    Node *cur,*prev,*next;
+    cur = head;
+    prev = NULL;
+    while (cur != NULL)
+    {
+        next = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = next;
+    }
+    head = prev;
+}
+``````
+首先，函数判断链表的头部是否为空或只有一个节点，如果是，则无需进行翻转，直接返回。这一步的判断是非常必要的，因为链表为空或只有一个节点时，翻转链表是没有意义的。
+
+接着，函数定义了三个指针变量 cur、prev、next，它们分别指向当前节点、当前节点的前一个节点和当前节点的后一个节点。其中，cur 变量初始化为链表的头部，prev 变量初始化为 NULL。
+
+进入 while 循环，每次将 next 指向当前节点 cur 的下一个节点，然后将 cur 的 next 指针指向 prev，这样就完成了当前节点的翻转。接着，将 prev 指向当前节点 cur，cur 指向下一个节点 next，继续执行下一轮循环。这样不断地执行，直到 cur 指向链表的最后一个节点，此时整个链表就被翻转了。
+
+最后，将链表的头部指向反转后的链表头部 prev，完成链表的翻转操作。
+
+综上所述，您的 Reverse() 函数采用了迭代的方式翻转链表，通过遍历链表，每次将当前节点的 next 指针指向前一个节点，最终完成整个链表的翻转。
+
+完整代码(ReverseLinklist)：
+```cpp
+#include <iostream>
+using namespace std;
+struct Node
+{
+    int data;
+    Node *next;
+};
+Node *head;
+void Insert(int num);
+void Print();
+void Reverse();
+int main(void)
+{
+    head = NULL;
+    Insert(1);
+    Insert(2);
+    Insert(3);
+    Insert(4);
+    Insert(5);
+    Insert(6);
+    Print();
+    cout << "Now we will reverse this linklist!" << endl;
+    Reverse();
+    Print();
+}
+void Insert(int num)
+{
+    Node *temp = new Node();
+    temp->data = num;
+    temp->next = NULL;
+    if (head == NULL)
+    {
+        head = temp;
+    }
+    else
+    {
+        Node *cur = head;
+        while (cur->next != NULL)
+        {
+            cur = cur->next;
+        }
+        cur->next = temp;
+    }
+}
+void Print()
+{
+    cout << "The content in linklist:" << endl;
+    Node *cur = head;
+    while (cur != NULL)
+    {
+        cout << cur->data << " ";
+        cur = cur->next;
+    }
+    cout << endl;
+}
+void Reverse()
+{
+    if (head == NULL || head->next == NULL)
+    {
+        cout << "元素数量不足，无法进行翻转!" << endl;
+        return;
+    }
+    Node *cur,*prev,*next;
+    cur = head;
+    prev = NULL;
+    while (cur != NULL)
+    {
+        next = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = next;
+    }
+    head = prev;
+}
+```
