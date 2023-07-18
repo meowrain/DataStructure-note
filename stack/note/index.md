@@ -527,3 +527,198 @@ int main(void)
 }
 ```
 
+# 用栈检查括号是否匹配
+```cpp
+#include <iostream>
+#include <stack>
+#include <string>
+
+// 括号匹配函数
+bool paren(const std::string &input)
+{
+    std::stack<char> s;
+    for (const char c : input)
+    {
+        // 左括号入栈
+        if (c == '(' || c == '[' || c == '{')
+        {
+            s.push(c);
+            continue;
+        }
+        // 右括号匹配
+        if (s.empty() ||
+            (c == ')' && s.top() != '(') ||
+            (c == '}' && s.top() != '{') ||
+            (c == ']' && s.top() != '['))
+        {
+            return false;
+        }
+
+        // 匹配成功，弹出左括号
+        s.pop();
+    }
+    // 判断栈是否为空
+    return s.empty();
+}
+
+int main()
+{
+    const std::string input1 = "({[]})";
+    const std::string input2 = "({[})";
+    std::cout << std::boolalpha << paren(input1) << '\n';
+    std::cout << std::boolalpha << paren(input2) << '\n';
+    /*
+    std::boolalpha 是一个 std::ios 标志，用于指示流输出布尔值时使用文字形式输出，即将 true 输出为 "true"，将 false 输出为 "false"。
+
+    默认情况下，流输出布尔值时使用整数形式输出，即将 true 输出为 1，将 false 输出为 0。如果需要输出文字形式，可以使用 std::boolalpha 标志。
+
+    在代码中，std::cout << std::boolalpha << paren(input1) << '\n'; 表示将 std::boolalpha 标志应用到 std::cout 流上，以确保输出的布尔值使用文字形式。
+     */
+    return 0;
+}
+```
+
+这段代码实现了一个括号匹配的函数 paren，用于判断一个由括号组成的字符串中的括号是否匹配。
+
+函数 paren 接受一个字符串 input 作为输入，使用一个栈 s 对每个左括号进行入栈操作，并在遇到右括号时进行匹配操作。具体来说，当遇到左括号时，将其压入栈中；当遇到右括号时，判断栈顶元素是否与该右括号匹配，如果匹配则弹出栈顶元素，否则返回 false。
+
+在函数结束时，判断栈是否为空，如果为空则返回 true，否则返回 false。
+
+在 main 函数中，声明了两个字符串 input1 和 input2，分别为 "({[]})" 和 "({[})"。然后分别调用 paren 函数，并将返回值输出到标准输出流中。
+
+std::boolalpha 标志用于指示流输出布尔值时使用文字形式输出，即将 true 输出为 "true"，将 false 输出为 "false"。这样可以使输出更加直观。
+
+最后返回 0，表示程序正常退出。
+
+# 什么是前缀，中缀，后缀
+https://zhuanlan.zhihu.com/p/37467928
+
+学习这里建议看三哥得课
+https://www.bilibili.com/video/BV1Fv4y1f7T1?p=21&spm_id_from=pageDriver&vd_source=f7d0ce024b059d57a0319d78217fa104
+
+**19-22**就是讲这些得，其中有伪代码
+
+
+
+中缀表达式转后缀表达式：
+> GPT写的
+```cpp
+#include <iostream>
+#include <stack>
+#include <unordered_map>
+#include <vector>
+#include <sstream>
+#include <algorithm>
+
+bool isOperator(const std::string& token)
+{
+    static const std::unordered_map<std::string, int> operators = {
+        {"+", 1},
+        {"-", 1},
+        {"*", 2},
+        {"/", 2},
+        {"%", 2},
+        {"^", 3}
+    };
+    return operators.count(token) > 0;
+}
+
+bool isOperand(const std::string& token)
+{
+    return !isOperator(token) && token != "(" && token != ")";
+}
+
+int precedence(const std::string& op)
+{
+    static const std::unordered_map<std::string, int> operators = {
+        {"+", 1},
+        {"-", 1},
+        {"*", 2},
+        {"/", 2},
+        {"%", 2},
+        {"^", 3}
+    };
+    return operators.at(op);
+}
+
+std::vector<std::string> infixToPostfix(const std::vector<std::string>& infix)
+{
+    std::stack<std::string> s;
+    std::vector<std::string> postfix;
+
+    for (const auto& token : infix) {
+        if (isOperand(token)) {
+            postfix.push_back(token);
+        } else if (token == "(") {
+            s.push(token);
+        } else if (token == ")") {
+            while (!s.empty() && s.top() != "(") {
+                postfix.push_back(s.top());
+                s.pop();
+            }
+            if (s.empty()) {
+                throw std::runtime_error("Unmatched parenthesis");
+            }
+            s.pop();
+        } else if (isOperator(token)) {
+            while (!s.empty() && s.top() != "(" && precedence(token) <= precedence(s.top())) {
+                postfix.push_back(s.top());
+                s.pop();
+            }
+            s.push(token);
+        }
+    }
+
+    while (!s.empty()) {
+        if (s.top() == "(") {
+            throw std::runtime_error("Unmatched parenthesis");
+        }
+        postfix.push_back(s.top());
+        s.pop();
+    }
+
+    return postfix;
+}
+
+int main()
+{
+    std::string input;
+    std::getline(std::cin, input);
+
+    std::vector<std::string> tokens;
+    std::istringstream iss(input);
+    std::string token;
+    while (iss >> token) {
+        tokens.push_back(token);
+    }
+
+    const auto postfix = infixToPostfix(tokens);
+
+    for (const auto& token : postfix) {
+        std::cout << token << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+
+/* 
+3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3
+3 4 2 * 1 5 - 2 ^ 3 ^ / +
+ */
+
+```
+
+在这个程序中，我们定义了以下几个函数：
+
+isOperator：判断一个字符串是否为运算符。
+isOperand：判断一个字符串是否为操作数。
+precedence：获取一个运算符的优先级。
+infixToPostfix：将一个中缀表达式转换为后缀表达式。
+在 infixToPostfix 函数中，我们使用一个栈 s 和一个输出序列 postfix。我们从左到右遍历输入的中缀表达式，对于每个操作数，直接将其添加到输出序列中；对于每个运算符，我们从栈中弹出优先级比它高或相等的运算符，并将它们添加到输出序列中，然后将当前运算符入栈。对于左括号，直接入栈；对于右括号，我们从栈中弹出运算符，直到遇到左括号，并将弹出的运算符添加到输出序列中。在遍历完成后，我们将栈中所有剩余的运算符依次弹出，并将它们添加到输出序列中。
+
+最后，我们按照正序遍历输出序列，即得到了转换后的后缀表达式。
+
+注意，这个程序还考虑了一些错误处理。如果括号不匹配，程序将抛出一个 std::runtime_error 异常。
+
+
