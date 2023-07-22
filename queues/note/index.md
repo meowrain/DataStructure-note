@@ -1,9 +1,10 @@
 # 队列
 
-
 队列（Queue）是一种常见的数据结构，它类似于现实生活中的排队等待。队列的操作包括入队（enqueue）和出队（dequeue）两种操作，其中入队将一个元素添加到队列的末尾，出队则从队列的头部删除一个元素。因此，队列是一种先进先出（First-In-First-Out，FIFO）的数据结构。
 
 队列通常有两个指针，一个指向队列的头部，另一个指向队列的尾部。入队操作会将元素添加到尾部指针所指向的位置，同时将尾部指针向后移动一位；出队操作会将头部指针所指向的元素删除，并将头部指针向后移动一位。因此，队列的大小通常由头部指针和尾部指针之间的元素个数确定。
+
+## 数组实现队列
 
 首先，要创建一个队列，需要指定队列的容量。容量是队列中可以存储的最大元素数。创建队列后，可以通过 `push_back()`函数将元素添加到队列的尾部。`push_back()`函数会将元素添加到队列的尾部，并更新队列的大小。
 
@@ -169,11 +170,13 @@ int main(void) {
     return 0;
 }
 ```
+
 这里面用到了循环队列，关于循环队列的资料
 
 循环队列是一种线性数据结构，它的操作基于先进先出（FIFO）原则，队尾被连接在队首之后以形成一个循环。它能够有效地利用空间，避免了普通队列在出队操作后产生的空间浪费。
 
 这里有一些国际网站上关于循环队列的资料，您可以参考一下：
+
 - [Programiz: Circular Queue Data Structure]¹
 - [😊GeeksforGeeks: Introduction to Circular Queue]²
 - [维基百科: 环形缓冲区]³
@@ -182,3 +185,115 @@ int main(void) {
 (1) Circular Queue Data Structure - Programiz. https://www.programiz.com/dsa/circular-queue.
 (2) Introduction to Circular Queue - GeeksforGeeks. https://www.geeksforgeeks.org/introduction-to-circular-queue/.
 (3) 環形緩衝區 - 維基百科，自由的百科全書. https://zh.wikipedia.org/zh-tw/%E7%92%B0%E5%BD%A2%E7%B7%A9%E8%A1%9D%E5%8D%80.
+
+## 链表实现队列
+你定义了一个模板结构体 Node，它表示链表中的节点，包含一个数据成员 data 和一个指向下一个节点的指针 next。
+
+你定义了一个模板类 Queue，它表示队列。它包含了两个私有成员变量 front 和 rear，它们分别指向队列的头部和尾部。
+
+在队列的构造函数中，你将 front 和 rear 初始化为 nullptr，表示队列为空。
+
+enqueue 函数用于将元素入队。它首先创建一个新的节点 newNode，并将传入的值 value 存储在 newNode 的 data 成员中。然后，它根据队列是否为空来更新 front 和 rear 的指针。如果队列为空，将 newNode 赋值给 front 和 rear。如果队列不为空，将 newNode 连接到队列的尾部，并更新 rear 的指针。
+
+dequeue 函数用于将队头元素出队。它首先检查队列是否为空。如果队列为空，将 rear 置为 nullptr，并输出错误信息。如果队列不为空，将 front 指向下一个节点，即将队头指针向前移动一个位置。
+
+getFront 函数用于获取队头元素。它首先检查队列是否为空。如果队列为空，输出错误信息并返回类型 T 的默认值（通过 return T() 实现）。如果队列不为空，返回 front 节点的数据成员 data。
+
+isEmpty 函数用于判断队列是否为空。它检查 front 是否为 nullptr，如果是，则队列为空，返回 true，否则返回 false。
+
+在 main 函数中，你创建了一个 Queue<int> 类型的队列对象 intQueue，并使用 enqueue 函数将整数元素从 0 到 9 入队。然后，你使用 getFront 函数获取队头元素，并输出队列是否为空的信息。接下来，你使用 dequeue 函数将队列中的元素逐个出队，并输出每个出队的元素。最后，你再次输出队列是否为空的信息。
+
+![1689929798133](image/index/1689929798133.png)
+
+
+```cpp
+#include <iostream>
+// 链表节点模板
+template <typename T>
+struct Node
+{
+    T data;
+    Node<T> *next;
+};
+
+// 队列类模板
+template <typename T>
+class Queue
+{
+private:
+    Node<T> *front; // 队头指针
+    Node<T> *rear;  // 队尾指针
+public:
+    Queue()
+    {
+        front = rear = nullptr;
+    }
+    // 入队
+    void enqueue(const T &value)
+    {
+        Node<T> *newNode = new Node<T>;
+        newNode->data = value;
+        newNode->next = nullptr;
+        if (rear == nullptr)
+        {
+            front = newNode;
+            rear = newNode;
+        }
+        else
+        {
+            rear->next = newNode;
+            rear = newNode;
+        }
+    }
+    // 出队
+    void dequeue()
+    {
+        if (front == nullptr)
+        {
+            std::cout << "队列为空，无法出队！" << std::endl;
+            return;
+        }
+        Node<T> *temp = front;
+        front = front->next;
+        if (front == nullptr)
+        {
+            rear = nullptr;
+        }
+        delete temp;
+    }
+    // 获取队头元素
+    T getFront()
+    {
+        if (front == nullptr)
+        {
+            std::cout << "队列为空，无法获取队头元素！" << std::endl;
+            return T();
+        }
+        return front->data;
+    }
+    // 判断队列是否为空
+    bool isEmpty()
+    {
+        return front == nullptr;
+    }
+};
+
+int main()
+{
+    Queue<int> intQueue;
+    for (int i = 0; i < 10; i++)
+    {
+        intQueue.enqueue(i);
+    }
+    std::cout << "Queue Head:" << intQueue.getFront() << std::endl;
+    std::cout << "Is Queue empty? " << std::boolalpha << intQueue.isEmpty() << std::endl;
+    std::cout << "Dequeue from the head of Queue:" << std::endl;
+    while (!intQueue.isEmpty())
+    {
+        std::cout << intQueue.getFront() << " ";
+        intQueue.dequeue();
+    }
+    std::cout << "Is Queue empty? " << std::boolalpha << intQueue.isEmpty() << std::endl;
+    return 0;
+}
+```
