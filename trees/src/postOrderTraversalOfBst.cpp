@@ -1,4 +1,4 @@
-/* 前序遍历 */
+/* 后序遍历 */
 #include <iostream>
 template <typename T>
 struct Node
@@ -32,23 +32,25 @@ private:
 
 public:
     BST() : root(nullptr){};
-    Node<T> *getRoot(){return root;};
+    Node<T> *getRoot() { return root; };
     void insert(T value)
     {
         root = insertRecursive(root, value);
     }
-    void PreOrder(Node<T> *node)
+    void postOrder(Node<T> *node)
     {
         if (node == nullptr)
         {
             return;
         }
+        postOrder(node->left);
+        postOrder(node->right);
         std::cout << node->data << " ";
-        PreOrder(node->left);
-        PreOrder(node->right);
+
     }
 };
-int main(void) {
+int main(void)
+{
     BST<int> bst;
     bst.insert(4);
     bst.insert(2);
@@ -57,5 +59,6 @@ int main(void) {
     bst.insert(6);
     bst.insert(5);
     bst.insert(7);
-    bst.PreOrder(bst.getRoot());
+    bst.postOrder(bst.getRoot());
+    return 0;
 }

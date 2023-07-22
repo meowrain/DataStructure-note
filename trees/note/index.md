@@ -217,7 +217,7 @@ int main(void)
 ![1689943754048](image/index/1689943754048.png)
 
 ### 二叉搜索树查找最大最小值
-
+[findMinMaxByBST.cpp](../src/findMinMaxByBST.cpp)
 根据二叉搜索树的性质，我们知道，一直走左子树，就是最小值，一直走右子树，就是最大值
 
 ```cpp
@@ -299,7 +299,7 @@ int main(void)
 ```
 
 ### 获得二叉搜索树的最大深度
-
+[findHeightOfBST.cpp](../src/findHeightOfBST.cpp)
 树的深度：树从根结点开始往下数，叶子结点所在的最大层数称为树的深度。
 
 代码：
@@ -460,11 +460,317 @@ getHeight(4)调用：
 
 ## 三种遍历方式
 https://meowrain.cn/archives/er-cha-shu
+```plaintext
+DLR–前序遍历（根在前，从左往右，一棵树的根永远在左子树前面，左子树又永远在右子树前面 ）
+
+LDR–中序遍历（根在中，从左往右，一棵树的左子树永远在根前面，根永远在右子树前面）
+
+LRD–后序遍历（根在后，从左往右，一棵树的左子树永远在右子树前面，右子树永远在根前面）
+```
+
 目前有以前用c写的，下面会用c++重写一次
-### 前序遍历
-### 中序遍历
-### 后续遍历
+### 前序遍历(DLR)
+
+**DLR**
+
+[**preOrder.cpp**](../src/preOrderTraversalOfBst.cpp)
+```cpp
+#include <iostream>
+template <typename T>
+struct Node
+{
+    T data;
+    Node<T> *left;
+    Node<T> *right;
+    Node(T value) : data(value), left(nullptr), right(nullptr) {}
+};
+template <typename T>
+class BST
+{
+private:
+    Node<T> *root;
+    Node<T> *insertRecursive(Node<T> *node, T value)
+    {
+        if (node == nullptr)
+        {
+            return new Node<T>(value);
+        }
+        if (value < node->data)
+        {
+            node->left = insertRecursive(node->left, value);
+        }
+        else if (value > node->data)
+        {
+            node->right = insertRecursive(node->right, value);
+        }
+        return node;
+    }
+
+public:
+    BST() : root(nullptr){};
+    Node<T> *getRoot(){return root;};
+    void insert(T value)
+    {
+        root = insertRecursive(root, value);
+    }
+    void PreOrder(Node<T> *node)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+        std::cout << node->data << " ";
+        PreOrder(node->left);
+        PreOrder(node->right);
+    }
+};
+int main(void) {
+    BST<int> bst;
+    bst.insert(4);
+    bst.insert(2);
+    bst.insert(1);
+    bst.insert(3);
+    bst.insert(6);
+    bst.insert(5);
+    bst.insert(7);
+    bst.PreOrder(bst.getRoot());
+}
+```
+![1690005337575](image/index/1690005337575.png)
+### 中序遍历(LDR)
+
+**LDR**
+
+[inOrder.cpp](../src/inOrderTraversalOfBst.cpp)
+```cpp
+/* 中序遍历 */
+#include <iostream>
+template <typename T>
+struct Node
+{
+    T data;
+    Node<T> *left;
+    Node<T> *right;
+    Node(T value) : data(value), left(nullptr), right(nullptr) {}
+};
+template <typename T>
+class BST
+{
+private:
+    Node<T> *root;
+    Node<T> *insertRecursive(Node<T> *node, T value)
+    {
+        if (node == nullptr)
+        {
+            return new Node<T>(value);
+        }
+        if (value < node->data)
+        {
+            node->left = insertRecursive(node->left, value);
+        }
+        else if (value > node->data)
+        {
+            node->right = insertRecursive(node->right, value);
+        }
+        return node;
+    }
+
+public:
+    BST() : root(nullptr){};
+    Node<T> *getRoot() { return root; };
+    void insert(T value)
+    {
+        root = insertRecursive(root, value);
+    }
+    void inOrder(Node<T> *node)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+        inOrder(node->left);
+        std::cout << node->data << " ";
+        inOrder(node->right);
+    }
+};
+int main(void)
+{
+    BST<int> bst;
+    bst.insert(4);
+    bst.insert(2);
+    bst.insert(1);
+    bst.insert(3);
+    bst.insert(6);
+    bst.insert(5);
+    bst.insert(7);
+    bst.inOrder(bst.getRoot());
+}
+```
+![1690005968947](image/index/1690005968947.png)
+### 后序遍历(LRD)
+![1690006302166](image/index/1690006302166.png)
+```cpp
+/* 后序遍历 */
+#include <iostream>
+template <typename T>
+struct Node
+{
+    T data;
+    Node<T> *left;
+    Node<T> *right;
+    Node(T value) : data(value), left(nullptr), right(nullptr) {}
+};
+template <typename T>
+class BST
+{
+private:
+    Node<T> *root;
+    Node<T> *insertRecursive(Node<T> *node, T value)
+    {
+        if (node == nullptr)
+        {
+            return new Node<T>(value);
+        }
+        if (value < node->data)
+        {
+            node->left = insertRecursive(node->left, value);
+        }
+        else if (value > node->data)
+        {
+            node->right = insertRecursive(node->right, value);
+        }
+        return node;
+    }
+
+public:
+    BST() : root(nullptr){};
+    Node<T> *getRoot() { return root; };
+    void insert(T value)
+    {
+        root = insertRecursive(root, value);
+    }
+    void postOrder(Node<T> *node)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+        postOrder(node->left);
+        postOrder(node->right);
+        std::cout << node->data << " ";
+
+    }
+};
+int main(void)
+{
+    BST<int> bst;
+    bst.insert(4);
+    bst.insert(2);
+    bst.insert(1);
+    bst.insert(3);
+    bst.insert(6);
+    bst.insert(5);
+    bst.insert(7);
+    bst.postOrder(bst.getRoot());
+    return 0;
+}
+```
+
 ### 层序遍历
+因为要使用队列实现，所以写了[MyQueue.cpp](../src/MyQueue.cpp)和[MyQueue.h](../src/MyQueue.h)
+下面是levelOrderTraversalOfBst.cpp得实现
+![1690005361802](image/index/1690005361802.png)
+![1690005491692](image/index/1690005491692.png)
+```cpp
+#include <iostream>
+#include "MyQueue.h"
+
+class BinarySearchTree
+{
+private:
+    Node *root;
+
+    // Helper function for inserting a value into the binary search tree
+    Node* insertHelper(Node *current, int value)
+    {
+        if (current == nullptr)
+        {
+            return new Node(value);
+        }
+
+        if (value < current->data)
+        {
+            current->left = insertHelper(current->left, value);
+        }
+        else if (value > current->data)
+        {
+            current->right = insertHelper(current->right, value);
+        }
+
+        return current;
+    }
+
+public:
+    BinarySearchTree() : root(nullptr) {}
+
+    void insert(int value)
+    {
+        root = insertHelper(root, value);
+    }
+
+    void levelOrderTraversal()
+    {
+        if (root == nullptr)
+        {
+            return;
+        }
+
+        MyQueue queue;
+        queue.push(root);
+
+        while (!queue.empty())
+        {
+            Node *current = queue.front();
+            std::cout << current->data << " ";
+
+            if (current->left)
+            {
+                queue.push(current->left);
+            }
+
+            if (current->right)
+            {
+                queue.push(current->right);
+            }
+
+            queue.pop();
+        }
+    }
+};
+
+int main()
+{
+    BinarySearchTree bst;
+
+    // 插入节点构建二叉搜索树
+    bst.insert(4);
+    bst.insert(2);
+    bst.insert(1);
+    bst.insert(3);
+    bst.insert(6);
+    bst.insert(5);
+    bst.insert(7);
+
+    // 层序遍历并输出结果
+    std::cout << "Level Order Traversal: ";
+    bst.levelOrderTraversal();
+    std::cout << std::endl;
+
+    return 0;
+}
+
+```
+
 ## 广度优先搜索和深度优先搜素(BFS&DFS)
 > 在介绍BFS和DFS之前，容许我先来讲讲什么是前序遍历，中序遍历，后序遍历，层序遍历，
 
